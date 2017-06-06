@@ -3,12 +3,12 @@ Go library containing a collection of financial functions for time value of mone
 
 ## List of functions
 
-## Rates
+### Rates
 
 - [EffectiveRate](https://godoc.org/github.com/alpeb/go-finance/fin#EffectiveRate)
 - [NominalRate](https://godoc.org/github.com/alpeb/go-finance/fin#NominalRate)
 
-## Cashflow
+### Cashflow
 
 - [NetPresentValue](https://godoc.org/github.com/alpeb/go-finance/fin#NetPresentValue)
 - [InternalRateOfReturn](https://godoc.org/github.com/alpeb/go-finance/fin#InternalRateOfReturn)
