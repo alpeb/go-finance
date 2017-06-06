@@ -22,7 +22,7 @@ func TestEffectiveRate(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got, _ := EffectiveRate(test.nominal, test.numPeriods); math.Abs(test.want-got) > PRECISION {
+		if got, _ := EffectiveRate(test.nominal, test.numPeriods); math.Abs(test.want-got) > Precision {
 			t.Errorf("EffectiveRate(%f, %d) = %f", test.nominal, test.numPeriods, got)
 		}
 	}
@@ -47,7 +47,7 @@ func TestNominalRate(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got, _ := NominalRate(test.effective, test.numPeriods); math.Abs(test.want-got) > PRECISION {
+		if got, _ := NominalRate(test.effective, test.numPeriods); math.Abs(test.want-got) > Precision {
 			t.Errorf("NominalRate(%f, %d) = %f", test.effective, test.numPeriods, got)
 		}
 	}

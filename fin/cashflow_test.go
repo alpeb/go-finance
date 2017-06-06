@@ -15,7 +15,7 @@ func TestNetPresentValue(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got := NetPresentValue(test.rate, test.values); math.Abs(test.want-got) > PRECISION {
+		if got := NetPresentValue(test.rate, test.values); math.Abs(test.want-got) > Precision {
 			t.Errorf("NetPresentValue(%f, %v) = %f", test.rate, test.values, got)
 		}
 	}
@@ -33,7 +33,7 @@ func TestInternalRateOfReturn(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got, _ := InternalRateOfReturn(test.values, test.guess); math.Abs(test.want-got) > PRECISION {
+		if got, _ := InternalRateOfReturn(test.values, test.guess); math.Abs(test.want-got) > Precision {
 			t.Errorf("InternalRateOfReturn(%v, %f) = %f", test.values, test.guess, got)
 		}
 	}
@@ -56,7 +56,7 @@ func TestModifiedInternalRateOfReturn(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got, _ := ModifiedInternalRateOfReturn(test.values, test.financeRate, test.reinvestRate); math.Abs(test.want-got) > PRECISION {
+		if got, _ := ModifiedInternalRateOfReturn(test.values, test.financeRate, test.reinvestRate); math.Abs(test.want-got) > Precision {
 			t.Errorf("ModifiedInternalRateOfReturn(%v, %f, %f) = %f", test.values, test.financeRate, test.reinvestRate, got)
 		}
 	}

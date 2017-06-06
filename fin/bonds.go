@@ -6,29 +6,29 @@ import (
 	"time"
 )
 
+// These constants are used in the bonds functions (paramter "basis"), for specifying the basis for the type of day count:
 const (
 	// US(NASD) 30/360
-	COUNT_NASD = iota
+	CountNasd = iota
 	// Actual/actual
-	COUNT_ACTUAL_ACTUAL
+	CountActualActual
 	// Actual/360
-	COUNT_ACTUAL_360
+	CountActual360
 	// Actual/365
-	COUNT_ACTUAL_365
+	CountActual365
 	// European 30/360
-	COUNT_EUROPEAN
+	CountEuropean
 )
 
-// DaysDifference returns the difference of days between two dates based on a daycount basis
-// date1 and date2 are UNIX timestamps (seconds).
-// basis is the type of day count: COUNT_NASD, COUNT_ACTUAL_ACTUAL, COUNT_ACTUAL_360, COUNT_ACTUAL_365 or COUNT_EUROPEAN
+// DaysDifference returns the difference of days between two dates based on a daycount basis.
+// Date1 and date2 are UNIX timestamps (seconds).
 func DaysDifference(date1 int64, date2 int64, basis int) int {
 	y1, mName1, d1 := time.Unix(date1, 0).Date()
 	m1 := int(mName1)
 	y2, mName2, d2 := time.Unix(date2, 0).Date()
 	m2 := int(mName2)
 	switch basis {
-	case COUNT_NASD:
+	case CountNasd:
 		if d2 == 31 && (d1 == 30 || d1 == 31) {
 			d2 = 30
 		}
@@ -36,40 +36,43 @@ func DaysDifference(date1 int64, date2 int64, basis int) int {
 			d1 = 30
 		}
 		return (y2-y1)*360 + (m2-m1)*30 + d2 - d1
-	case COUNT_ACTUAL_ACTUAL, COUNT_ACTUAL_360, COUNT_ACTUAL_365:
+	case CountActualActual, CountActual360, CountActual365:
 		return int((date2 - date1) / 86400)
-	case COUNT_EUROPEAN:
+	case CountEuropean:
 		return (y2-y1)*360 + (m2-m1)*30 + d2 - d1
 	}
 	return 0
 }
 
-// DaysPerYear returns the number of days in the year based on a daycount basis
-// basis is the type of day count: COUNT_NASD, COUNT_ACTUAL_ACTUAL, COUNT_ACTUAL_360, COUNT_ACTUAL_365 or COUNT_EUROPEAN
+// DaysPerYear returns the number of days in the year based on a daycount basis.
 func DaysPerYear(year int, basis int) int {
 	switch basis {
-	case COUNT_NASD:
+	case CountNasd:
 		return 360
-	case COUNT_ACTUAL_ACTUAL:
+	case CountActualActual:
 		if isLeap(year) {
 			return 366
 		} else {
 			return 365
 		}
-	case COUNT_ACTUAL_360:
+	case CountActual360:
 		return 360
-	case COUNT_ACTUAL_365:
+	case CountActual365:
 		return 365
-	case COUNT_EUROPEAN:
+	case CountEuropean:
 		return 360
 	}
 	return 0
 }
 
 // TBillYield returns the yield for a treasury bill
+//
 // settlement is the unix timestamp (seconds) for the settlement date
+//
 // maturity is the unix timestamp (seconds) for the maturity date
+//
 // price is the TBill price per $100 face value
+//
 // Excel equivalent: TBILLYIELD
 func TBillYield(settlement int64, maturity int64, price float64) (float64, error) {
 	if settlement >= maturity {
@@ -83,9 +86,13 @@ func TBillYield(settlement int64, maturity int64, price float64) (float64, error
 }
 
 // TBillPrice returns the price per $100 face value for a Treasury bill
+//
 // settlement is the unix timestamp (seconds) for the settlement date
+//
 // maturity is the unix timestamp (seconds) for the maturity date
+//
 // discount is the T-Bill discount rate
+//
 // Excel equivalent: TBILLPRICE
 func TBillPrice(settlement int64, maturity int64, discount float64) (float64, error) {
 	if settlement >= maturity {
@@ -99,15 +106,19 @@ func TBillPrice(settlement int64, maturity int64, discount float64) (float64, er
 }
 
 // TBillEquivalentYield returns the bond-equivalent yield for a Treasury bill
+//
 // settlement is the unix timestamp (seconds) for the settlement date
+//
 // maturity is the unix timestamp (seconds) for the maturity date
+//
 // discount is the T-Bill discount rate
+//
 // Excel equivalent: TBILLEQ
 func TBillEquivalentYield(settlement int64, maturity int64, discount float64) (float64, error) {
 	if settlement >= maturity {
 		return 0, errors.New("Maturity must happen before settlement!")
 	}
-	dsm := float64(DaysDifference(settlement, maturity, COUNT_ACTUAL_365))
+	dsm := float64(DaysDifference(settlement, maturity, CountActual365))
 	ySettlement, mNameSettlement, _ := time.Unix(settlement, 0).Date()
 	mSettlement := int(mNameSettlement)
 	yMaturity, _, _ := time.Unix(maturity, 0).Date()
@@ -126,11 +137,15 @@ func TBillEquivalentYield(settlement int64, maturity int64, discount float64) (f
 }
 
 // DiscoutRate returns the discount rate for a bond
+//
 // settlement is the unix timestamp (seconds) for the settlement date
+//
 // maturity is the unix timestamp (seconds) for the maturity date
+//
 // price is the bond's price per $100 face value
+//
 // redemption is the bond's redemption value per $100 face value
-// basis is the type of day count: COUNT_NASD, COUNT_ACTUAL_ACTUAL, COUNT_ACTUAL_360, COUNT_ACTUAL_365 or COUNT_EUROPEAN
+//
 // Excel equivalent: DISC
 func DiscountRate(settlement int64, maturity int64, price float64, redemption float64, basis int) float64 {
 	year, _, _ := time.Unix(settlement, 0).Date()
@@ -140,11 +155,15 @@ func DiscountRate(settlement int64, maturity int64, price float64, redemption fl
 }
 
 // PriceDiscount returns the price per $100 face value of a discounted bond
+//
 // settlement is the unix timestamp (seconds) for the settlement date
+//
 // maturity is the unix timestamp (seconds) for the maturity date
+//
 // discount is the bond's discount rate
+//
 // redemption is the bond's redemption value per $100 face value
-// basis is the type of day count: COUNT_NASD, COUNT_ACTUAL_ACTUAL, COUNT_ACTUAL_360, COUNT_ACTUAL_365 or COUNT_EUROPEAN
+//
 // Excel equivalent: PRICEDISC
 func PriceDiscount(settlement int64, maturity int64, discount float64, redemption float64, basis int) float64 {
 	year, _, _ := time.Unix(settlement, 0).Date()

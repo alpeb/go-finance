@@ -24,7 +24,7 @@ func TestDepreciationFixedDeclining(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got, _ := DepreciationFixedDeclining(test.cost, test.salvage, test.life, test.period, test.month); math.Abs(test.want-got) > PRECISION {
+		if got, _ := DepreciationFixedDeclining(test.cost, test.salvage, test.life, test.period, test.month); math.Abs(test.want-got) > Precision {
 			t.Errorf("DepreciationFixedDeclining(%f, %f, %d, %d, %d) = %f", test.cost, test.salvage, test.life, test.period, test.month, got)
 		}
 	}
@@ -41,7 +41,7 @@ func TestDepreciationStraightLine(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got, _ := DepreciationStraightLine(test.cost, test.salvage, test.life); math.Abs(test.want-got) > PRECISION {
+		if got, _ := DepreciationStraightLine(test.cost, test.salvage, test.life); math.Abs(test.want-got) > Precision {
 			t.Errorf("DepreciationStraightLine(%f, %f, %d) = %f", test.cost, test.salvage, test.life, got)
 		}
 	}
@@ -60,7 +60,7 @@ func TestDepreciationSYD(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got := DepreciationSYD(test.cost, test.salvage, test.life, test.per); math.Abs(test.want-got) > PRECISION {
+		if got := DepreciationSYD(test.cost, test.salvage, test.life, test.per); math.Abs(test.want-got) > Precision {
 			t.Errorf("DepreciationSYD(%f, %f, %d, %d) = %f", test.cost, test.salvage, test.life, test.per, got)
 		}
 	}

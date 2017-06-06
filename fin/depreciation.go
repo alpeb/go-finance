@@ -6,6 +6,7 @@ import (
 )
 
 // DepreciationFixedDeclining returns the depreciation of an asset using the fixed-declining balance method
+//
 // Excel equivalent: DB
 func DepreciationFixedDeclining(cost float64, salvage float64, life int, period int, month int) (float64, error) {
 	if cost < 0 || life < 0 {
@@ -32,6 +33,7 @@ func DepreciationFixedDeclining(cost float64, salvage float64, life int, period 
 }
 
 // DepreciationStraighLine returns the straight-line depreciation of an asset for each period
+//
 // Excel equivalent: SLN
 func DepreciationStraightLine(cost float64, salvage float64, life int) (float64, error) {
 	if cost < 0 || life < 0 {
@@ -41,6 +43,7 @@ func DepreciationStraightLine(cost float64, salvage float64, life int) (float64,
 }
 
 // DepreciationSYD returns the depreciation for an asset in a given period using the sum-of-years' digits method
+//
 // Excel equivalent: SYD
 func DepreciationSYD(cost float64, salvage float64, life int, per int) float64 {
 	return ((cost - salvage) * float64(life-per+1) * 2 / float64(life) / float64(life+1))

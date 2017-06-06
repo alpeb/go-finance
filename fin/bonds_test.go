@@ -9,7 +9,7 @@ import (
 func TestDaysDifference(t *testing.T) {
 	date1 := time.Date(2005, time.July, 1, 0, 0, 0, 0, time.UTC).Unix()
 	date2 := time.Date(2005, time.September, 1, 0, 0, 0, 0, time.UTC).Unix()
-	got := DaysDifference(date1, date2, COUNT_ACTUAL_365)
+	got := DaysDifference(date1, date2, CountActual365)
 	if got != 62 {
 		t.Errorf("DaysDifference(%d, %d) = %d", got)
 	}
@@ -20,7 +20,7 @@ func TestTBillYield(t *testing.T) {
 	maturity := time.Date(2008, time.June, 1, 0, 0, 0, 0, time.UTC).Unix()
 	price := 98.45
 	got, _ := TBillYield(settlement, maturity, price)
-	if math.Abs(got-0.091417) > PRECISION {
+	if math.Abs(got-0.091417) > Precision {
 		t.Errorf("TBillYield(%d, %d, %f) = %f", settlement, maturity, price, got)
 	}
 
@@ -40,7 +40,7 @@ func TestTBillPrice(t *testing.T) {
 	maturity := time.Date(2008, time.June, 1, 0, 0, 0, 0, time.UTC).Unix()
 	discount := 0.09
 	got, _ := TBillPrice(settlement, maturity, discount)
-	if math.Abs(got-98.45) > PRECISION {
+	if math.Abs(got-98.45) > Precision {
 		t.Errorf("TBillPrice(%d, %d, %f) = %f", settlement, maturity, discount, got)
 	}
 
@@ -70,7 +70,7 @@ func TestTBillEquivalentYield(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got, _ := TBillEquivalentYield(test.settlement, test.maturity, test.discount); math.Abs(test.want-got) > PRECISION {
+		if got, _ := TBillEquivalentYield(test.settlement, test.maturity, test.discount); math.Abs(test.want-got) > Precision {
 			t.Errorf("TBillEquivalentYield(%d, %d, %f) = %f", test.settlement, test.maturity, test.discount, got)
 		}
 	}
@@ -95,15 +95,15 @@ func TestDiscountRate(t *testing.T) {
 		basis      int
 		want       float64
 	}{
-		{time.Date(2007, time.January, 25, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2007, time.June, 15, 0, 0, 0, 0, time.UTC).Unix(), 97.975, 100, COUNT_NASD, 0.052071},
-		{time.Date(2007, time.January, 25, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2007, time.June, 15, 0, 0, 0, 0, time.UTC).Unix(), 97.975, 100, COUNT_ACTUAL_ACTUAL, 0.052420},
-		{time.Date(2007, time.January, 25, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2007, time.June, 15, 0, 0, 0, 0, time.UTC).Unix(), 97.975, 100, COUNT_ACTUAL_360, 0.051702},
-		{time.Date(2007, time.January, 25, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2007, time.June, 15, 0, 0, 0, 0, time.UTC).Unix(), 97.975, 100, COUNT_ACTUAL_365, 0.052420},
-		{time.Date(2007, time.January, 25, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2007, time.June, 15, 0, 0, 0, 0, time.UTC).Unix(), 97.975, 100, COUNT_EUROPEAN, 0.052071},
+		{time.Date(2007, time.January, 25, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2007, time.June, 15, 0, 0, 0, 0, time.UTC).Unix(), 97.975, 100, CountNasd, 0.052071},
+		{time.Date(2007, time.January, 25, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2007, time.June, 15, 0, 0, 0, 0, time.UTC).Unix(), 97.975, 100, CountActualActual, 0.052420},
+		{time.Date(2007, time.January, 25, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2007, time.June, 15, 0, 0, 0, 0, time.UTC).Unix(), 97.975, 100, CountActual360, 0.051702},
+		{time.Date(2007, time.January, 25, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2007, time.June, 15, 0, 0, 0, 0, time.UTC).Unix(), 97.975, 100, CountActual365, 0.052420},
+		{time.Date(2007, time.January, 25, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2007, time.June, 15, 0, 0, 0, 0, time.UTC).Unix(), 97.975, 100, CountEuropean, 0.052071},
 	}
 
 	for _, test := range tests {
-		if got := DiscountRate(test.settlement, test.maturity, test.price, test.redemption, test.basis); math.Abs(test.want-got) > PRECISION {
+		if got := DiscountRate(test.settlement, test.maturity, test.price, test.redemption, test.basis); math.Abs(test.want-got) > Precision {
 			t.Errorf("DiscountRate(%d, %d, %f, %f, %d) = %f", test.settlement, test.maturity, test.price, test.redemption, test.basis, got)
 		}
 	}
@@ -118,15 +118,15 @@ func TestPriceDiscount(t *testing.T) {
 		basis      int
 		want       float64
 	}{
-		{time.Date(2008, time.February, 16, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2008, time.March, 1, 0, 0, 0, 0, time.UTC).Unix(), 0.0525, 100, COUNT_NASD, 99.795833},
-		{time.Date(2008, time.February, 16, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2008, time.March, 1, 0, 0, 0, 0, time.UTC).Unix(), 0.0525, 100, COUNT_ACTUAL_ACTUAL, 99.799180},
-		{time.Date(2008, time.February, 16, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2008, time.March, 1, 0, 0, 0, 0, time.UTC).Unix(), 0.0525, 100, COUNT_ACTUAL_360, 99.795833},
-		{time.Date(2008, time.February, 16, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2008, time.March, 1, 0, 0, 0, 0, time.UTC).Unix(), 0.0525, 100, COUNT_ACTUAL_365, 99.798630},
-		{time.Date(2008, time.February, 16, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2008, time.March, 1, 0, 0, 0, 0, time.UTC).Unix(), 0.0525, 100, COUNT_EUROPEAN, 99.795833},
+		{time.Date(2008, time.February, 16, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2008, time.March, 1, 0, 0, 0, 0, time.UTC).Unix(), 0.0525, 100, CountNasd, 99.795833},
+		{time.Date(2008, time.February, 16, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2008, time.March, 1, 0, 0, 0, 0, time.UTC).Unix(), 0.0525, 100, CountActualActual, 99.799180},
+		{time.Date(2008, time.February, 16, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2008, time.March, 1, 0, 0, 0, 0, time.UTC).Unix(), 0.0525, 100, CountActual360, 99.795833},
+		{time.Date(2008, time.February, 16, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2008, time.March, 1, 0, 0, 0, 0, time.UTC).Unix(), 0.0525, 100, CountActual365, 99.798630},
+		{time.Date(2008, time.February, 16, 0, 0, 0, 0, time.UTC).Unix(), time.Date(2008, time.March, 1, 0, 0, 0, 0, time.UTC).Unix(), 0.0525, 100, CountEuropean, 99.795833},
 	}
 
 	for _, test := range tests {
-		if got := PriceDiscount(test.settlement, test.maturity, test.discount, test.redemption, test.basis); math.Abs(test.want-got) > PRECISION {
+		if got := PriceDiscount(test.settlement, test.maturity, test.discount, test.redemption, test.basis); math.Abs(test.want-got) > Precision {
 			t.Errorf("PriceDiscount(%d, %d, %f, %f, %d) = %f", test.settlement, test.maturity, test.discount, test.redemption, test.basis, got)
 		}
 	}

@@ -6,6 +6,7 @@ import (
 )
 
 // NetPresentValue returns the Net Present Value of a cash flow series given a discount rate
+//
 // Excel equivalent: NPV
 func NetPresentValue(rate float64, values []float64) float64 {
 	npv := 0.0
@@ -17,7 +18,8 @@ func NetPresentValue(rate float64, values []float64) float64 {
 }
 
 // InternalRateOfReturn returns the internal rate of return of a cash flow series.
-// guess is a guess for the rate, used as a starting point for the iterative algorithm.
+// Guess is a guess for the rate, used as a starting point for the iterative algorithm.
+//
 // Excel equivalent: IRR
 func InternalRateOfReturn(values []float64, guess float64) (float64, error) {
 	min, max := minMaxSlice(values)
@@ -44,8 +46,11 @@ func dNetPresentValue(rate float64, values []float64) float64 {
 }
 
 // ModifiedInternalRateOfReturn returns the internal rate of return of a cash flow series, considering both financial and reinvestment rates
+//
 // financeRate is the rate on the money used in the cash flow.
+//
 // reinvestRate is the rate received when reinvested
+//
 // Excel equivalent: MIRR
 func ModifiedInternalRateOfReturn(values []float64, financeRate float64, reinvestRate float64) (float64, error) {
 	min, max := minMaxSlice(values)
