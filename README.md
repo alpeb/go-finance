@@ -41,4 +41,4 @@ Go library containing a collection of financial functions for time value of mone
 - [DepreciationStraightLine](https://godoc.org/github.com/alpeb/go-finance/fin#DepreciationStraightLine)
 
 ## Docs
-Checkout the full docs [here](https://godoc.org/github.com/alpeb/go-finance/fin).
+Checkout the full [docs](https://godoc.org/github.com/alpeb/go-finance/fin).
