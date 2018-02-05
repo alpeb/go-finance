@@ -32,7 +32,7 @@ func DepreciationFixedDeclining(cost float64, salvage float64, life int, period 
 	return depreciationPeriod, nil
 }
 
-// DepreciationStraighLine returns the straight-line depreciation of an asset for each period
+// DepreciationStraightLine returns the straight-line depreciation of an asset for each period
 //
 // Excel equivalent: SLN
 func DepreciationStraightLine(cost float64, salvage float64, life int) (float64, error) {
