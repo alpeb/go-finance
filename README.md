@@ -1,4 +1,4 @@
-# go-finance
+# go-finance [![GoDoc](https://godoc.org/github.com/alpeb/go-finance?status.svg)](https://godoc.org/github.com/alpeb/go-finance/fin) [![Go Report Card](https://goreportcard.com/badge/github.com/alpeb/go-finance)](https://goreportcard.com/report/github.com/alpeb/go-finance)
 Go library containing a collection of financial functions for time value of money (annuities), cash flow, interest rate conversions, bonds and depreciation calculations.
 
 ## List of functions
