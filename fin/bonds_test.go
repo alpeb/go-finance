@@ -11,7 +11,7 @@ func TestDaysDifference(t *testing.T) {
 	date2 := time.Date(2005, time.September, 1, 0, 0, 0, 0, time.UTC).Unix()
 	got := DaysDifference(date1, date2, CountActual365)
 	if got != 62 {
-		t.Errorf("DaysDifference(%d, %d) = %d", got)
+		t.Errorf("DaysDifference(%d, %d) = %d", date1, date2, got)
 	}
 }
 

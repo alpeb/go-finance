@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// These constants are used in the bonds functions (paramter "basis"), for specifying the basis for the type of day count:
+// These constants are used in the bonds functions (parameter "basis"), for specifying the basis for the type of day count:
 const (
 	// US(NASD) 30/360
 	CountNasd = iota
@@ -52,9 +52,8 @@ func DaysPerYear(year int, basis int) int {
 	case CountActualActual:
 		if isLeap(year) {
 			return 366
-		} else {
-			return 365
 		}
+		return 365
 	case CountActual360:
 		return 360
 	case CountActual365:

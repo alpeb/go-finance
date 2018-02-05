@@ -5,7 +5,7 @@ import (
 	"math"
 )
 
-// These constants are used in the TVM functions (parameter "paymentType"). They determine wheter payments occur at the end or at the beginning of each period:
+// These constants are used in the TVM functions (parameter "paymentType"). They determine whether payments occur at the end or at the beginning of each period:
 const (
 	PayEnd = iota
 	PayBegin
