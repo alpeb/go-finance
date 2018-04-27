@@ -17,7 +17,7 @@ func newton(guess float64, function func(float64) float64, derivative func(float
 	if math.Abs(x-guess) < Precision {
 		return x, nil
 	} else if numIt >= MaxIterations {
-		return 0, errors.New("Solution didn't converge")
+		return 0, errors.New("solution didn't converge")
 	} else {
 		return newton(x, function, derivative, numIt+1)
 	}

@@ -16,10 +16,10 @@ const (
 // Excel equivalent: PV
 func PresentValue(rate float64, numPeriods int, pmt float64, fv float64, paymentType int) (pv float64, err error) {
 	if numPeriods < 0 {
-		return 0, errors.New("Number of periods must be positive")
+		return 0, errors.New("number of periods must be positive")
 	}
 	if paymentType != PayEnd && paymentType != PayBegin {
-		return 0, errors.New("Payment type must be PayEnd or PayBegin")
+		return 0, errors.New("payment type must be pay-end or pay-begin")
 	}
 	if rate != 0 {
 		pv = (-pmt*(1+rate*float64(paymentType))*((math.Pow(1+rate, float64(numPeriods))-1)/rate) - fv) / math.Pow(1+rate, float64(numPeriods))
@@ -34,10 +34,10 @@ func PresentValue(rate float64, numPeriods int, pmt float64, fv float64, payment
 // Excel equivalent: FV
 func FutureValue(rate float64, numPeriods int, pmt float64, pv float64, paymentType int) (fv float64, err error) {
 	if numPeriods < 0 {
-		return 0, errors.New("Number of periods must be positive")
+		return 0, errors.New("number of periods must be positive")
 	}
 	if paymentType != PayEnd && paymentType != PayBegin {
-		return 0, errors.New("Payment type must be PayEnd or PayBegin")
+		return 0, errors.New("payment type must be pay-end or pay-begin")
 	}
 	if rate != 0 {
 		fv = -pv*math.Pow(1+rate, float64(numPeriods)) - pmt*(1+rate*float64(paymentType))*(math.Pow(1+rate, float64(numPeriods))-1)/rate
@@ -52,10 +52,10 @@ func FutureValue(rate float64, numPeriods int, pmt float64, pv float64, paymentT
 // Excel equivalent: PMT
 func Payment(rate float64, numPeriods int, pv float64, fv float64, paymentType int) (pmt float64, err error) {
 	if numPeriods < 0 {
-		return 0, errors.New("Number of periods must be positive")
+		return 0, errors.New("number of periods must be positive")
 	}
 	if paymentType != PayEnd && paymentType != PayBegin {
-		return 0, errors.New("Payment type must be PayEnd or PayBegin")
+		return 0, errors.New("payment type must be pay-end or pay-begin")
 	}
 	if rate != 0 {
 		pmt = (-fv - pv*math.Pow(1+rate, float64(numPeriods))) / (1 + rate*float64(paymentType)) / ((math.Pow(1+rate, float64(numPeriods)) - 1) / rate)
@@ -70,16 +70,16 @@ func Payment(rate float64, numPeriods int, pv float64, fv float64, paymentType i
 // Excel equivalent: NPER
 func Periods(rate float64, pmt float64, pv float64, fv float64, paymentType int) (numPeriods float64, err error) {
 	if paymentType != PayEnd && paymentType != PayBegin {
-		return 0, errors.New("Payment type must be PayEnd or PayBegin")
+		return 0, errors.New("payment type must be pay-end or pay-begin")
 	}
 	if rate != 0 {
 		if pmt == 0 && pv == 0 {
-			return 0, errors.New("Payment and Present Value can't be both zero when the rate is not zero")
+			return 0, errors.New("payment and present value can't be both zero when the rate is not zero")
 		}
 		numPeriods = math.Log((pmt*(1+rate*float64(paymentType))/rate-fv)/(pv+pmt*(1+rate*float64(paymentType))/rate)) / math.Log(1+rate)
 	} else {
 		if pmt == 0 {
-			return 0, errors.New("Rate and Payment can't be both zero")
+			return 0, errors.New("pate and payment can't be both zero")
 		}
 		numPeriods = (-pv - fv) / pmt
 	}
@@ -92,7 +92,7 @@ func Periods(rate float64, pmt float64, pv float64, fv float64, paymentType int)
 // Excel equivalent: RATE
 func Rate(numPeriods int, pmt float64, pv float64, fv float64, paymentType int, guess float64) (float64, error) {
 	if paymentType != PayEnd && paymentType != PayBegin {
-		return 0, errors.New("Payment type must be PayEnd or PayBegin")
+		return 0, errors.New("payment type must be pay-end or pay-begin")
 	}
 	function := func(rate float64) float64 {
 		return f(rate, numPeriods, pmt, pv, fv, paymentType)
@@ -119,7 +119,7 @@ func df(rate float64, numPeriods int, pmt float64, pv float64, fv float64, payme
 // Excel equivalent: IMPT
 func InterestPayment(rate float64, period int, numPeriods int, pv float64, fv float64, paymentType int) (float64, error) {
 	if paymentType != PayEnd && paymentType != PayBegin {
-		return 0, errors.New("Payment type must be PayEnd or PayBegin")
+		return 0, errors.New("payment type must be pay-end or pay-begin")
 	}
 	interest, _, err := interestAndPrincipal(rate, period, numPeriods, pv, fv, paymentType)
 	if err != nil {
@@ -133,7 +133,7 @@ func InterestPayment(rate float64, period int, numPeriods int, pv float64, fv fl
 // Excel equivalent: PPMT
 func PrincipalPayment(rate float64, period int, numPeriods int, pv float64, fv float64, paymentType int) (float64, error) {
 	if paymentType != PayEnd && paymentType != PayBegin {
-		return 0, errors.New("Payment type must be PayEnd or PayBegin")
+		return 0, errors.New("payment type must be pay-end or pay-begin")
 	}
 	_, principal, err := interestAndPrincipal(rate, period, numPeriods, pv, fv, paymentType)
 	if err != nil {
