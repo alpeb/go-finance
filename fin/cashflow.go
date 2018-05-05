@@ -24,7 +24,7 @@ func NetPresentValue(rate float64, values []float64) float64 {
 func InternalRateOfReturn(values []float64, guess float64) (float64, error) {
 	min, max := minMaxSlice(values)
 	if min*max >= 0 {
-		return 0, errors.New("The cash flow must contain at least one positive value and one negative value")
+		return 0, errors.New("the cash flow must contain at least one positive value and one negative value")
 	}
 
 	function := func(rate float64) float64 {
@@ -55,7 +55,7 @@ func dNetPresentValue(rate float64, values []float64) float64 {
 func ModifiedInternalRateOfReturn(values []float64, financeRate float64, reinvestRate float64) (float64, error) {
 	min, max := minMaxSlice(values)
 	if min*max >= 0 {
-		return 0, errors.New("The cash flow must contain at least one positive value and one negative value")
+		return 0, errors.New("the cash flow must contain at least one positive value and one negative value")
 	}
 	positiveFlows := make([]float64, 0)
 	negativeFlows := make([]float64, 0)

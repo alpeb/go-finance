@@ -79,7 +79,7 @@ func TBillYield(settlement int64, maturity int64, price float64) (float64, error
 	}
 	dsm := float64(maturity-settlement) / float64(86400) // transform to days
 	if dsm > 360 {
-		return 0, errors.New("Maturity can't be more than one year after settlement")
+		return 0, errors.New("maturity can't be more than one year after settlement")
 	}
 	return (100 - price) * 360 / price / dsm, nil
 }
@@ -95,11 +95,11 @@ func TBillYield(settlement int64, maturity int64, price float64) (float64, error
 // Excel equivalent: TBILLPRICE
 func TBillPrice(settlement int64, maturity int64, discount float64) (float64, error) {
 	if settlement >= maturity {
-		return 0, errors.New("Maturity must happen before settlement!")
+		return 0, errors.New("maturity must happen before settlement!")
 	}
 	dsm := float64(maturity-settlement) / float64(86400) // transform to days
 	if dsm > 360 {
-		return 0, errors.New("Maturity can't be more than one year after settlement")
+		return 0, errors.New("maturity can't be more than one year after settlement")
 	}
 	return 100 * (1 - discount*dsm/360), nil
 }
@@ -129,7 +129,7 @@ func TBillEquivalentYield(settlement int64, maturity int64, discount float64) (f
 			(mSettlement > 2 && isLeap(yMaturity))) {
 		return 2 * (math.Sqrt(1-discount*366/(discount*366-360)) - 1), nil
 	} else if dsm > 365 {
-		return 0, errors.New("Maturity can't be more than one year after settlement")
+		return 0, errors.New("maturity can't be more than one year after settlement")
 	}
 	return (-dsm + math.Sqrt(math.Pow(dsm, 2)-(2*dsm-365)*discount*dsm*365/(discount*dsm-360))) / (dsm - 365/2), nil
 }
