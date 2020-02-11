@@ -13,6 +13,8 @@ Go library containing a collection of financial functions for time value of mone
 - [NetPresentValue](https://godoc.org/github.com/alpeb/go-finance/fin#NetPresentValue)
 - [InternalRateOfReturn](https://godoc.org/github.com/alpeb/go-finance/fin#InternalRateOfReturn)
 - [ModifiedInternalRateOfReturn](https://godoc.org/github.com/alpeb/go-finance/fin#ModifiedInternalRateOfReturn)
+- [ScheduledNetPresentValue](https://godoc.org/github.com/alpeb/go-finance/fin#ScheduledNetPresentValue)
+- [ScheduledInternalRateOfReturn](https://godoc.org/github.com/alpeb/go-finance/fin#ScheduledInternalRateOfReturn)
 
 ### TVM
 
