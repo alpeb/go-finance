@@ -3,6 +3,7 @@ package fin
 import (
 	"math"
 	"testing"
+	"time"
 )
 
 func TestNetPresentValue(t *testing.T) {
@@ -63,5 +64,85 @@ func TestModifiedInternalRateOfReturn(t *testing.T) {
 
 	if _, err := ModifiedInternalRateOfReturn([]float64{70000, 12000, 15000, 18000, 21000}, 0.1, 0.1); err == nil {
 		t.Error("If the cash flow doesn't contain at least one positive value and one negative value, it must return an error")
+	}
+}
+
+func TestScheduledNetPresentValue(t *testing.T) {
+	var tests = []struct {
+		rate   float64
+		values []float64
+		dates  []time.Time
+		want   float64
+	}{
+		{
+			0.09,
+			[]float64{
+				-10000,
+				2750,
+				4250,
+				3250,
+				2750,
+			},
+			[]time.Time{
+				time.Date(2008, time.Month(1), 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2008, time.Month(3), 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2008, time.Month(10), 30, 0, 0, 0, 0, time.UTC),
+				time.Date(2009, time.Month(2), 15, 0, 0, 0, 0, time.UTC),
+				time.Date(2009, time.Month(4), 1, 0, 0, 0, 0, time.UTC),
+			},
+			2086.647602,
+		},
+	}
+
+	for _, test := range tests {
+		if got, _ := ScheduledNetPresentValue(test.rate, test.values, test.dates); math.Abs(test.want-got) > Precision {
+			t.Errorf("ScheduledNetPresentValue(%f, %v, %v) = %f", test.rate, test.values, test.dates, got)
+		}
+	}
+
+	if _, err := ScheduledNetPresentValue(0.1, []float64{-10000}, []time.Time{}); err == nil {
+		t.Error("If values and dates have different lenghts, it must return an error")
+	}
+}
+
+func TestScheduledInternalRateOfReturn(t *testing.T) {
+	var tests = []struct {
+		values []float64
+		dates  []time.Time
+		guess  float64
+		want   float64
+	}{
+		{
+			[]float64{
+				-10000,
+				2750,
+				4250,
+				3250,
+				2750,
+			},
+			[]time.Time{
+				time.Date(2008, time.Month(1), 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2008, time.Month(3), 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2008, time.Month(10), 30, 0, 0, 0, 0, time.UTC),
+				time.Date(2009, time.Month(2), 15, 0, 0, 0, 0, time.UTC),
+				time.Date(2009, time.Month(4), 1, 0, 0, 0, 0, time.UTC),
+			},
+			0.1,
+			0.373362535,
+		},
+	}
+
+	for _, test := range tests {
+		if got, _ := ScheduledInternalRateOfReturn(test.values, test.dates, test.guess); math.Abs(test.want-got) > Precision {
+			t.Errorf("ScheduledInternalRateOfReturn(%v, %v, %f) = %f", test.values, test.dates, test.guess, got)
+		}
+	}
+
+	if _, err := ScheduledInternalRateOfReturn([]float64{10000, 2750}, []time.Time{time.Now(), time.Now()}, 0.1); err == nil {
+		t.Error("If the cash flow doesn't contain at least one positive value and one negative value, it must return an error")
+	}
+
+	if _, err := ScheduledInternalRateOfReturn([]float64{-10000, 2750}, []time.Time{}, 0.1); err == nil {
+		t.Error("If values and dates have different lenghts, it must return an error")
 	}
 }

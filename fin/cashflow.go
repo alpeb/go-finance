@@ -3,6 +3,7 @@ package fin
 import (
 	"errors"
 	"math"
+	"time"
 )
 
 // NetPresentValue returns the Net Present Value of a cash flow series given a discount rate
@@ -40,7 +41,7 @@ func dNetPresentValue(rate float64, values []float64) float64 {
 	dnpv := 0.0
 	nper := len(values)
 	for i := 1; i <= nper; i++ {
-		dnpv += values[i-1] * float64(-i) * math.Pow(1+rate, float64(i-1)) / math.Pow(1+rate, float64(2*i))
+		dnpv -= values[i-1] * float64(i) / math.Pow(1+rate, float64(i+1))
 	}
 	return dnpv
 }
@@ -70,6 +71,61 @@ func ModifiedInternalRateOfReturn(values []float64, financeRate float64, reinves
 	}
 	nper := len(values)
 	return math.Pow(-NetPresentValue(reinvestRate, positiveFlows)*math.Pow(1+reinvestRate, float64(nper))/NetPresentValue(financeRate, negativeFlows)/(1+financeRate), 1/float64(nper-1)) - 1, nil
+}
+
+// ScheduledNetPresentValue returns the Net Present Value of a scheduled cash flow series given a discount rate
+//
+// Excel equivalent: XNPV
+func ScheduledNetPresentValue(rate float64, values []float64, dates []time.Time) (float64, error) {
+	if len(values) != len(dates) {
+		return 0, errors.New("values and dates must have the same length")
+	}
+
+	xnpv := 0.0
+	nper := len(values)
+	for i := 1; i <= nper; i++ {
+		exp := dates[i-1].Sub(dates[0]).Hours() / 24.0 / 365.0
+		xnpv += values[i-1] / math.Pow(1+rate, exp)
+	}
+	return xnpv, nil
+}
+
+// ScheduledInternalRateOfReturn returns the internal rate of return of a scheduled cash flow series.
+// Guess is a guess for the rate, used as a starting point for the iterative algorithm.
+//
+// Excel equivalent: XIRR
+func ScheduledInternalRateOfReturn(values []float64, dates []time.Time, guess float64) (float64, error) {
+	min, max := minMaxSlice(values)
+	if min*max >= 0 {
+		return 0, errors.New("the cash flow must contain at least one positive value and one negative value")
+	}
+	if len(values) != len(dates) {
+		return 0, errors.New("values and dates must have the same length")
+	}
+
+	function := func(rate float64) float64 {
+		r, _ := ScheduledNetPresentValue(rate, values, dates)
+		return r
+	}
+	derivative := func(rate float64) float64 {
+		r, _ := dScheduledNetPresentValue(rate, values, dates)
+		return r
+	}
+	return newton(guess, function, derivative, 0)
+}
+
+func dScheduledNetPresentValue(rate float64, values []float64, dates []time.Time) (float64, error) {
+	if len(values) != len(dates) {
+		return 0, errors.New("values and dates must have the same length")
+	}
+
+	dxnpv := 0.0
+	nper := len(values)
+	for i := 1; i <= nper; i++ {
+		exp := dates[i-1].Sub(dates[0]).Hours() / 24.0 / 365.0
+		dxnpv -= values[i-1] * exp / math.Pow(1+rate, exp+1)
+	}
+	return dxnpv, nil
 }
 
 func minMaxSlice(values []float64) (float64, float64) {
