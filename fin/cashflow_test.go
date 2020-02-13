@@ -92,6 +92,22 @@ func TestScheduledNetPresentValue(t *testing.T) {
 			},
 			2086.647602,
 		},
+		{
+			0.2,
+			[]float64{
+				-2000,
+				1000,
+				1000,
+				1000,
+			},
+			[]time.Time{
+				time.Date(2020, time.Month(2), 12, 0, 0, 0, 0, time.UTC),
+				time.Date(2020, time.Month(3), 20, 0, 0, 0, 0, time.UTC),
+				time.Date(2020, time.Month(4), 20, 0, 0, 0, 0, time.UTC),
+				time.Date(2020, time.Month(5), 20, 0, 0, 0, 0, time.UTC),
+			},
+			900.5182206,
+		},
 	}
 
 	for _, test := range tests {
@@ -101,7 +117,7 @@ func TestScheduledNetPresentValue(t *testing.T) {
 	}
 
 	if _, err := ScheduledNetPresentValue(0.1, []float64{-10000}, []time.Time{}); err == nil {
-		t.Error("If values and dates have different lenghts, it must return an error")
+		t.Error("If values and dates have different lengths, it must return an error")
 	}
 }
 
@@ -130,6 +146,22 @@ func TestScheduledInternalRateOfReturn(t *testing.T) {
 			0.1,
 			0.373362535,
 		},
+		{
+			[]float64{
+				-2000,
+				1000,
+				1000,
+				1000,
+			},
+			[]time.Time{
+				time.Date(2020, time.Month(2), 12, 0, 0, 0, 0, time.UTC),
+				time.Date(2020, time.Month(3), 20, 0, 0, 0, 0, time.UTC),
+				time.Date(2020, time.Month(4), 20, 0, 0, 0, 0, time.UTC),
+				time.Date(2020, time.Month(5), 20, 0, 0, 0, 0, time.UTC),
+			},
+			0.1,
+			8.493343973,
+		},
 	}
 
 	for _, test := range tests {
@@ -143,6 +175,6 @@ func TestScheduledInternalRateOfReturn(t *testing.T) {
 	}
 
 	if _, err := ScheduledInternalRateOfReturn([]float64{-10000, 2750}, []time.Time{}, 0.1); err == nil {
-		t.Error("If values and dates have different lenghts, it must return an error")
+		t.Error("If values and dates have different lengths, it must return an error")
 	}
 }
