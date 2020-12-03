@@ -46,6 +46,10 @@ Go library containing a collection of financial functions for time value of mone
 
 Checkout the full [docs](https://godoc.org/github.com/alpeb/go-finance/fin).
 
+Also check this excellent blog post [Learning finance concepts using
+go-finance](https://blog.aawadia.dev/2020/11/30/finance-concepts-go-finance/)
+for some examples and a general intro.
+
 ## License
 
 [Mozilla Public License 2.0](https://github.com/alpeb/go-finance/blob/master/LICENSE)
