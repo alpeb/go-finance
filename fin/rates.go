@@ -9,7 +9,7 @@ import (
 //
 // Excel equivalent: EFFECT
 func EffectiveRate(nominal float64, numPeriods int) (float64, error) {
-	if numPeriods < 0 {
+	if numPeriods <= 0 {
 		return 0, errors.New("numPeriods must be strictly positive")
 	}
 	return math.Pow(1+nominal/float64(numPeriods), float64(numPeriods)) - 1, nil
@@ -19,7 +19,7 @@ func EffectiveRate(nominal float64, numPeriods int) (float64, error) {
 //
 // Excel equivalent: NOMINAL
 func NominalRate(effectiveRate float64, numPeriods int) (float64, error) {
-	if numPeriods < 0 {
+	if numPeriods <= 0 {
 		return 0, errors.New("number of compounding payments per year must be strictly positive")
 	}
 	return float64(numPeriods) * (math.Pow(effectiveRate+1, 1/float64(numPeriods)) - 1), nil

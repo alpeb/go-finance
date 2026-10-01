@@ -30,6 +30,9 @@ func TestEffectiveRate(t *testing.T) {
 	if _, err := EffectiveRate(0.40, -13); err == nil {
 		t.Error("A negative number of periods should produce an error")
 	}
+	if got, err := EffectiveRate(0.10, 0); err == nil {
+		t.Errorf("EffectiveRate(0.10, 0) = %v, want an error", got)
+	}
 }
 
 func TestNominalRate(t *testing.T) {
@@ -54,5 +57,8 @@ func TestNominalRate(t *testing.T) {
 
 	if _, err := NominalRate(0.2930, -5); err == nil {
 		t.Error("A negative number of periods should produce an error")
+	}
+	if got, err := NominalRate(0.10, 0); err == nil {
+		t.Errorf("NominalRate(0.10, 0) = %v, want an error", got)
 	}
 }
